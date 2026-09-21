@@ -1,0 +1,79 @@
+.tbge-srm-col-ancien {
+	font-size: 12px;
+	color: #666;
+	max-width: 140px;
+	word-break: break-all;
+}
+
+.tbge-srm-btn {
+	margin-left: 4px;
+	font-size: 11px;
+	padding: 2px 6px;
+	vertical-align: middle;
+}
+
+.tbge-srm-overlay {
+	position: fixed;
+	inset: 0;
+	background: rgba(0, 0, 0, 0.45);
+	z-index: 10050;
+	display: none;
+	align-items: center;
+	justify-content: center;
+	pointer-events: none;
+	visibility: hidden;
+}
+
+.tbge-srm-overlay.is-open {
+	display: flex;
+	pointer-events: auto;
+	visibility: visible;
+}
+
+.tbge-srm-modal {
+	background: #fff;
+	border-radius: 6px;
+	width: min(520px, 92vw);
+	padding: 20px 22px;
+	box-shadow: 0 8px 30px rgba(0, 0, 0, 0.25);
+}
+
+.tbge-srm-modal h4 {
+	margin: 0 0 12px;
+	color: #005b7a;
+}
+
+.tbge-srm-modal .help {
+	font-size: 12px;
+	color: #777;
+	margin-bottom: 12px;
+}
+
+.tbge-srm-modal label {
+	font-weight: 600;
+	font-size: 13px;
+}
+
+.tbge-srm-modal .form-control {
+	margin-bottom: 10px;
+}
+
+.tbge-srm-modal-actions {
+	text-align: right;
+	margin-top: 14px;
+}
+
+.tbge-srm-modal-actions .btn + .btn {
+	margin-left: 8px;
+}
+
+.tbge-srm-badge-srm {
+	display: inline-block;
+	background: #005b7a;
+	color: #fff;
+	font-size: 10px;
+	padding: 1px 5px;
+	border-radius: 3px;
+	margin-left: 4px;
+	vertical-align: middle;
+}

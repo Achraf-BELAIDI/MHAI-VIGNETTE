@@ -1,0 +1,52 @@
+---
+description: Compteur ID Lieu / SRM — modifications à conserver sur Anc_Vignette
+alwaysApply: true
+---
+
+# Projet actif : Anc_Vignette (pas Nv_Vignette)
+
+- **Chemin racine transmis :** `C:\Users\user\Desktop\Projet_DSI_Courant\Anc_Vignette\TBGE\mhai_vignettes`
+- **App Laravel :** `...\mhai_vignettes\mhai_vignettes`
+- Le serveur sur **port 3300** sert **Anc_Vignette**, pas `Nv_Vignette`.
+- Toute correction compteur / facture / SRM doit être faite **ici**, pas dans `Nv_Vignette`.
+
+# Objectif métier
+
+Création/édition compteur fluide pour **tous** les fournisseurs (ONEE, Lydec, Redal, Amendis, SRM) :
+
+- **ID Lieu** = n° contrat / police / CIL chez le fournisseur (libellé dynamique).
+- **N° contrat SRM** = champ **séparé**, visible **uniquement** si fournisseur = SRM.
+- Ne jamais afficher « ID Lieu (contrat SRM) * » pour un non-SRM.
+
+# Mapping base
+
+| Fournisseur | `compteur.reference` (factures) | `reference_ancienne` |
+|---|---|---|
+| Non-SRM | ID Lieu saisi | — |
+| SRM | `ContratSrm` | ID Lieu optionnel (ancien CIL) si renseigné et ≠ contrat SRM |
+
+# Fichiers concernés (déjà modifiés — vérifier / compléter)
+
+1. `mhai_vignettes/resources/views/tbge/tbge/compteur/create.blade.php`
+   - `#label-id-lieu` neutre (« ID Lieu * »)
+   - `#bloc-contrat-srm` (caché par défaut) + input `ContratSrm`
+   - cache JS : `coeCVM.js?v=20260921anc2` (bump si nouveau changement)
+2. `mhai_vignettes/public/tbge-legacy/createOrEdit/coeCVM.js`
+   - `getSelectedFournisseurName`, `isSrmFournisseur`, `updateLabelsForFournisseur`
+   - `prefillSrmFieldsFromRawData` (édition SRM)
+   - Select2 : `minimumResultsForSearch: 0` + sync KO FournisseurID
+   - Validation KO : `Reference` required seulement si **non-SRM** ; `ContratSrm` required si **SRM**
+3. `mhai_vignettes/app/Http/Controllers/Tbge/CompteurTbgeController.php`
+   - `store()` : `isSrmFournisseurId`, `referenceCourante` / `referenceAncienne`, `applyReferenceAncienne`
+4. Extension : `resources/views/tbge/extensions/compteur-srm-fields.blade.php` (affichage `reference_ancienne` en édition)
+
+# Règles UI / JS
+
+- Détection SRM stricte : mot entier `SRM` dans le nom fournisseur (`/\bsrm\b/i`), pas un simple « contient srm ».
+- Labels ID Lieu selon fournisseur : Redal → CIL ; ONEE / Lydec / Amendis → contrat X.
+- Après changement de code UI : **Ctrl+F5** + `php artisan view:clear`.
+
+# Ne pas faire
+
+- Ne pas re-modifier `Nv_Vignette` pour ce sujet sauf demande explicite.
+- Ne pas hardcoder « ID Lieu (contrat SRM) » dans le Blade.
